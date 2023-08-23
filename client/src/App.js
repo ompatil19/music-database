@@ -1,10 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
-
+import Albums from './components/albums/Albums';
 function App() {
   return (
     <>
-    
+    <Albums/>
     </>
   );
 }

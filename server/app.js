@@ -95,7 +95,7 @@ async function getAlbumDetails(albumName) {
 }
 
 // Example usage
-const albumName = 'sour'; // Replace with the album name you want to search for
+const albumName = 'folklore'; // Replace with the album name you want to search for
 getAccessToken().then(()=>{getAlbumDetails(albumName)
   .then(albumDetails => {
     console.log('Album Details:', albumDetails);
