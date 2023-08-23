@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
 function App() {
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = () => {
+    // Handle search functionality here using the searchText state
+    console.log('Searching for:', searchText);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <input
+        type="text"
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        placeholder="Enter search text"
+      />
+      <button onClick={handleSearch}>Search</button>
     </div>
   );
 }
