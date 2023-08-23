@@ -72,7 +72,7 @@ app.use(express.json());
 app.use(cors());
 
 mongoose.connect(
-  "mongodb+srv://ompatil:chocolate19@cluster0.dsrdyr0.mongodb.net/"
+  "mongodb+srv://mohit:chocolate01@cluster0.dsrdyr0.mongodb.net/"
 );
 
 //Spotify authorisation
