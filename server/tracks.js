@@ -42,7 +42,7 @@ function getAccessToken() {
 }
 
 
-async function getAlbumDetails(albumName) {
+async function getSongDetails(songname) {
   try {
     const searchOptions = {
       url: 'https://api.spotify.com/v1/search',
@@ -51,43 +51,34 @@ async function getAlbumDetails(albumName) {
         'Authorization': `Bearer ${ACCESS_TOKEN}`
       },
       params: {
-        q: albumName,
-        type: 'album'
+        q: songname,
+        type: 'track'
       }
     };
 
     const response = await axios(searchOptions);
-    const albums = response.data.albums.items;
+    const tracks = response.data.tracks.items;
 
-    if (albums.length > 0) {
-      const album = albums[0];
-      const albumId = album.id;
+    if (tracks.length > 0) {
+      const track = tracks[0];
 
-      const albumDetailsOptions = {
-        url: `https://api.spotify.com/v1/albums/${albumId}`,
-        method: 'get',
-        headers: {
-          'Authorization': `Bearer ${ACCESS_TOKEN}`
-        }
-      };
-
-      const albumResponse = await axios(albumDetailsOptions);
-      const detailedAlbum = albumResponse.data;
-
-      // Prepare and return the album details
-      const albumDetails = {
-        id: albumId,
-        name: detailedAlbum.name,
-        artists: detailedAlbum.artists.map(artist => artist.name),
-        release_date: detailedAlbum.release_date,
-        total_tracks: detailedAlbum.total_tracks,
-        genres: detailedAlbum.genres,
+      // Prepare and return the song details
+      const songDetails = {
+        id: track.id,
+        name: track.name,
+        //genre: track.album.genres, // Example, accessing the first genre
+        duration: track.duration_ms, // Duration in milliseconds
+        release_date: track.album.release_date,
+        streams: track.popularity,
+        explicit: track.explicit,
+        artists: track.artists.map(artist => artist.name),
+        albumname: track.album.name,
         // Add more details as needed
       };
 
-      return albumDetails;
+      return songDetails;
     } else {
-      throw new Error('Album not found.');
+      throw new Error('Song not found.');
     }
   } catch (error) {
     console.error('Error:', error);
@@ -95,21 +86,34 @@ async function getAlbumDetails(albumName) {
   }
 }
 
+
 // Example usage
-const albumName = 'folklore'; // Replace with the album name you want to search for
-getAccessToken().then(()=>{getAlbumDetails(albumName)
-  .then(albumDetails => {
-    console.log('Album Details:', albumDetails);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+const songname = 'mirrorball'; // Replace with the song name you want to search for
+
+getAccessToken().then(() => {
+  getSongDetails(songname)
+    .then(songDetails => {
+      console.log('Song Details:', songDetails);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 });
 
 
-//Route to get data from database
-app.get("/getUsers", (req, res) => {
-  UserModel.find({}, (err, result) => {
+
+
+// Route to add song data to the database
+app.post("/createSong", async (req, res) => {
+  const song = req.body;
+  const newSong = new songsModel(song);
+  await newSong.save();
+
+  res.json(song);
+});
+// Route to get song data from the database
+app.get("/getSongs", (req, res) => {
+  songsModel.find({}, (err, result) => {
     if (err) {
       res.json(err);
     } else {
@@ -119,17 +123,8 @@ app.get("/getUsers", (req, res) => {
 });
 
 
-//Route to add data to database
-app.post("/createUser", async (req, res) => {
-  const user = req.body;
-  const newUser = new UserModel(user);
-  await newUser.save();
-
-  res.json(user);
-});
 
 
-
-app.listen(3001, () => {
+app.listen(3002, () => {
   console.log("SERVER RUNS PERFECTLY!");
 });
