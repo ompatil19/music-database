@@ -1,63 +1,5 @@
-// const express = require("express");
-// const app = express();
-// const mongoose = require("mongoose");
-// //const songsModel = require("./models/songs");
-// //const axios = require('axios');
-
-// const cors = require("cors");
-
-// app.use(express.json());
-// app.use(cors());
-
-// mongoose.connect(
-//   "mongodb+srv://prakruthi:chocolate19@cluster0.dsrdyr0.mongodb.net/"
-// );
-
-
-// var client_id = '66b1e51344074dfe84deafaec427d5a3';
-// var redirect_uri = 'http://localhost:3000/callback';
-
-// app.get('/login', function(req, res) {
-
-//   var state = generateRandomString(16);
-//   var scope = 'user-read-private user-read-email';
-
-//   res.redirect('https://accounts.spotify.com/authorize?' +
-//     querystring.stringify({
-//       response_type: 'code',
-//       client_id: client_id,
-//       scope: scope,
-//       redirect_uri: redirect_uri,
-//       state: state
-//     }));
-// });
-
-
-// // app.get("/getsongs", (req, res) => {
-// //   songsModel.find({}, (err, result) => {
-// //     if (err) {
-// //       res.json(err);
-// //     } else {
-// //       res.json(result);
-// //     }
-// //   });
-// // });
-
-// // app.post("/createsongs", async (req, res) => {
-// //   const user = req.body;
-// //   const newUser = new UserModel(user);
-// //   await newUser.save();
-
-// //   res.json(user);
-// // });
-
-// app.listen(3000, () => {
-//   console.log("Listening on port 3000");
-// });
-
 const express = require("express");
 const querystring = require("querystring");
-const axios = require("axios");
 const app = express();
 const mongoose = require("mongoose");
 const axios = require('axios');
@@ -65,6 +7,7 @@ require('dotenv').config();
 // const UserModel = require("./models/Users");
 
 const cors = require("cors");
+const { get } = require("http");
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 let ACCESS_TOKEN;
@@ -92,7 +35,7 @@ function getAccessToken() {
   return axios(authOptions)
     .then(response => {
       ACCESS_TOKEN = response.data.access_token;
-      console.log('Access Token:', ACCESS_TOKEN);
+      // console.log('Access Token:', ACCESS_TOKEN);
     })
     .catch(error => {
       console.error('Error:', error);
@@ -155,15 +98,21 @@ async function getAlbumDetails(albumName) {
 
 // Example usage
 const albumName = 'folklore'; // Replace with the album name you want to search for
-getAccessToken().then(()=>{getAlbumDetails(albumName)
-  .then(albumDetails => {
-    console.log('Album Details:', albumDetails);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-});
+app.get("/albums/:albumName", async (req, res) => {
+  const albumName = req.params.albumName;
 
+  try {
+    let album_details = {};
+    getAccessToken().then(() => { getAlbumDetails(albumName).then((albumDetails) => {
+      album_details = albumDetails;
+      // console.log("Album details: ", album_details);
+      res.json(albumDetails);
+    }); });
+  } catch (error) {
+    console.error('Error:', error)
+    res.status(500).json({ error: 'An error occurred.' });
+  }
+});
 
 //Route to get data from database
 app.get("/getUsers", (req, res) => {
