@@ -4,23 +4,28 @@ const songsSchema = new mongoose.Schema({
     songId:{
         type:String,
         required:true,
-        unique:true,
+        // unique:true, 
     },
     songname:{
         type:String,     
     },
-    genre:{
-        type:String,
+    // artist: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'artistModel',
+    //     // required: true,
+    // },
+    genres:{
+        type:Array,
         required:true,
     },
     duration:{
         type:String,     
     },
-    releasedate:{
+    releasedate:{ 
         type:String,     
     },
     streams:{
-        type:Int32Array,     
+        type:String     
     },
     explicity:{
         type:String
