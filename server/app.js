@@ -11,7 +11,7 @@ const getSongDetails = require('./songs');
 const getPlaylistDetails = require('./playlist');
 
 const getAccessToken = require('./getAccessToken'); // Import your access token function if not already done
-const insertionLogic = require('./insertion'); 
+const insertionLogic = require('./insertion');
 
 const cors = require("cors");
 
@@ -35,7 +35,7 @@ getAccessToken().then(()=>{getAlbumDetails(albumName)
 });
 
 
-  
+
 
  // Example usage
   const artistName = 'Drake'; // Replace with the artist name you want to search for
@@ -77,7 +77,7 @@ getAccessToken().then(() => {
   //             console.error('Error:', error);
   //         });
   // });
-  
+
 
 
 // //Route to get data from database
