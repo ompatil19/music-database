@@ -1,139 +1,201 @@
 const express = require("express");
-const querystring = require("querystring");
 const app = express();
-const mongoose = require("mongoose");
-const axios = require('axios');
 require('dotenv').config();
-// const UserModel = require("./models/Users");
+
+const getArtistDetails = require('./artist'); // Import the artist.js file
+const getAlbumDetails = require('./album');
+const getSongDetails = require('./songs');
+const getPlaylistDetails = require('./playlist');
+
+const getAccessToken = require('./getAccessToken'); // Import your access token function if not already done
+const insertionLogic = require('./insertion');
 
 const cors = require("cors");
-const { get } = require("http");
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-let ACCESS_TOKEN;
+
+
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect(
-  "mongodb+srv://ompatil:chocolate19@cluster0.dsrdyr0.mongodb.net/"
-);
-
-//Spotify authorisation
-// Function to obtain the access token
-function getAccessToken() {
-  const authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    method: 'post',
-    headers: {
-      'Authorization': 'Basic ' + Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64')
-    },
-    params: {
-      grant_type: 'client_credentials'
+  app.get('/album/:albumName', async (req, res) => {
+    const albumName = req.params.albumName;
+    
+    try {
+        const albumDetails = await getAccessToken().then(()=>{getAlbumDetails(albumName)
+          .then(albumDetails => {
+            console.log('Album Details:', albumDetails);
+           // insertionLogic.insertAlbum(albumDetails);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+        });
+        res.json(albumDetails);
+    } catch (error) {
+        res.status(404).json({ error: 'Album not found' });
     }
-  };
-
-  return axios(authOptions)
-    .then(response => {
-      ACCESS_TOKEN = response.data.access_token;
-      // console.log('Access Token:', ACCESS_TOKEN);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-}
+});
 
 
-async function getAlbumDetails(albumName) {
-  try {
-    const searchOptions = {
-      url: 'https://api.spotify.com/v1/search',
-      method: 'get',
-      headers: {
-        'Authorization': `Bearer ${ACCESS_TOKEN}`
-      },
-      params: {
-        q: albumName,
-        type: 'album'
-      }
-    };
-
-    const response = await axios(searchOptions);
-    const albums = response.data.albums.items;
-
-    if (albums.length > 0) {
-      const album = albums[0];
-      const albumId = album.id;
-
-      const albumDetailsOptions = {
-        url: `https://api.spotify.com/v1/albums/${albumId}`,
-        method: 'get',
-        headers: {
-          'Authorization': `Bearer ${ACCESS_TOKEN}`
-        }
-      };
-
-      const albumResponse = await axios(albumDetailsOptions);
-      const detailedAlbum = albumResponse.data;
-
-      // Prepare and return the album details
-      const albumDetails = {
-        id: albumId,
-        name: detailedAlbum.name,
-        artists: detailedAlbum.artists.map(artist => artist.name),
-        release_date: detailedAlbum.release_date,
-        total_tracks: detailedAlbum.total_tracks,
-        genres: detailedAlbum.genres,
-        // Add more details as needed
-      };
-
-      return albumDetails;
-    } else {
-      throw new Error('Album not found.');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
-}
-
-// Example usage
-const albumName = 'folklore'; // Replace with the album name you want to search for
-app.get("/albums/:albumName", async (req, res) => {
+app.post('/album/:albumName/insert', async (req, res) => {
   const albumName = req.params.albumName;
-
+    
   try {
-    let album_details = {};
-    getAccessToken().then(() => { getAlbumDetails(albumName).then((albumDetails) => {
-      album_details = albumDetails;
-      // console.log("Album details: ", album_details);
+      const albumDetails = await getAccessToken().then(()=>{getAlbumDetails(albumName)
+        .then(albumDetails => {
+          console.log('Album Details:', albumDetails);
+          insertionLogic.insertAlbum(albumDetails);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      });
       res.json(albumDetails);
-    }); });
   } catch (error) {
-    console.error('Error:', error)
-    res.status(500).json({ error: 'An error occurred.' });
+      res.status(404).json({ error: 'Album not found' });
   }
 });
 
-//Route to get data from database
-app.get("/getUsers", (req, res) => {
-  UserModel.find({}, (err, result) => {
-    if (err) {
-      res.json(err);
-    } else {
-      res.json(result);
-    }
+app.get('/artist/:artistName', async (req, res) => {
+  const artistName = req.params.artistName;
+  
+  try {
+    const artistDetails = await  getAccessToken().then(() => {
+      getArtistDetails(artistName)
+        .then(artistDetails => {
+          console.log('Artist Details:', artistDetails);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+    res.json(artistDetails);
+  } catch (error) {
+    res.status(404).json({ error: 'Artist not found' });
+  }
+});
+
+app.post('/artist/:artistName/insert', async (req, res) => {
+  const artistName = req.params.artistName;
+  
+  try {
+    const artistDetails = await  getAccessToken().then(() => {
+      getArtistDetails(artistName)
+        .then(artistDetails => {
+          console.log('Artist Details:', artistDetails);
+          insertionLogic.insertArtist(artistDetails);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+    res.json({ message: 'Artist details inserted successfully' });
+  } catch (error) {
+    res.status(400).json({ error: 'Error inserting artist details' });
+  }
+});
+
+app.get('/song/:songName', async (req, res) => {
+  const songName = req.params.songName;
+  
+  try {
+    const songDetails = await getAccessToken().then(() => {
+      getSongDetails(songName)
+          .then(songDetails => {
+              console.log('Song Details:', songDetails);
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
   });
+    res.json(songDetails);
+  } catch (error) {
+    res.status(404).json({ error: 'Song not found' });
+  }
+});
+
+app.post('/song/:songName/insert', async (req, res) => {
+  const songName = req.params.songName;
+  
+  try {
+    const songDetails = await getAccessToken().then(() => {
+      getSongDetails(songName)
+          .then(songDetails => {
+              console.log('Song Details:', songDetails);
+              insertionLogic.insertSong(songDetails);
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+  });
+    insertionLogic.insertSong(songDetails);
+    res.json({ message: 'Song details inserted successfully' });
+  } catch (error) {
+    res.status(400).json({ error: 'Error inserting song details' });
+  }
 });
 
 
-//Route to add data to database
-app.post("/createUser", async (req, res) => {
-  const user = req.body;
-  const newUser = new UserModel(user);
-  await newUser.save();
-
-  res.json(user);
+app.get('/playlist/:playlistName', async (req, res) => {
+  const playlistName = req.params.playlistName;
+  
+  try {
+    const playlistDetails = await   getAccessToken().then(() => {
+      getPlaylistDetails(playlistName)
+          .then(playlistDetails => {
+              console.log('Playlist Details:', playlistDetails);
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+  });
+    res.json(playlistDetails);
+  } catch (error) {
+    res.status(404).json({ error: 'Playlist not found' });
+  }
 });
+
+app.post('/playlist/:playlistName/insert', async (req, res) => {
+  const playlistName = req.params.playlistName;
+  
+  try {
+    const playlistDetails = await   getAccessToken().then(() => {
+      getPlaylistDetails(playlistName)
+          .then(playlistDetails => {
+              console.log('Playlist Details:', playlistDetails);
+              insertionLogic.insertPlaylist(playlistDetails); 
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+  });
+    insertionLogic.insertPlaylist(playlistDetails);
+    res.json({ message: 'Playlist details inserted successfully' });
+  } catch (error) {
+    res.status(400).json({ error: 'Error inserting playlist details' });
+  }
+});
+
+
+// //Route to get data from database
+// app.get("/getUsers", (req, res) => {
+//   UserModel.find({}, (err, result) => {
+//     if (err) {
+//       res.json(err);
+//     } else {
+//       res.json(result);
+//     }
+//   });
+// });
+
+
+// //Route to add data to database
+// app.post("/createUser", async (req, res) => {
+//   const user = req.body;
+//   const newUser = new UserModel(user);
+//   await newUser.save();
+
+//   res.json(user);
+// });
 
 
 

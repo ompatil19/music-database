@@ -1,48 +1,30 @@
 const mongoose=require('mongoose');
 
 const artistsSchema = new mongoose.Schema({
-    playlistID:{
+    artistId:{
         type:String,
         required:true,
         unique: true,
     },
+    artistName:{
+        type:String,
+        required:true,
+    },
+    followers:{
+        type:String,
+        required:true,
+    },
     popularity:{
-        type:int,
-        required:true,
-    },
-    firstname:{
         type:String,
         required:true,
     },
-    lastname:{
-        type:String,
+    genres:{
+        type:Object,
         required:true,
         // unique:true,
     },
-    songID:{
-        type:String,
-        required:true,       
-    },
-    concerts:{
-        type:String,
-        required:true,
-        // unique:true,
-    },
-    listeners:{
-        type:String,
-        required:true,
-        //unique:true,
-    },
-    dateofbirth:{
-        type:Date,
-        required:true,
-        // unique:true,
-    },
-    age:{
-        type:int,
-        required:true,
-        // unique:true,
-    }
+
+
 
   });
 
