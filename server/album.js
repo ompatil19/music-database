@@ -41,8 +41,8 @@ async function getAlbumDetails(albumName) {
           artists: detailedAlbum.artists.map(artist => artist.name),
           releaseDate: detailedAlbum.release_date,
           total_tracks: detailedAlbum.total_tracks,
-          genres: detailedAlbum.genres,
-          // Add more details as needed
+          //genres: detailedAlbum.genres,
+
         };
    
         return albumDetails;

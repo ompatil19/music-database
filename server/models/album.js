@@ -26,10 +26,10 @@ const albumSchema = new mongoose.Schema({
     //     ref: 'tracksModel',
     //     required: true,
     // },
-    genres:{
-        type:String,
-        // required:true
-    } 
+    // genres:{
+    //     type:String,
+    //     // required:true
+    // } 
         
 });
 

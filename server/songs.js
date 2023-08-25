@@ -1,6 +1,6 @@
 const axios = require('axios');
-const Song = require('./models/songs'); // Import your Song model
-const getArtistDetails = require('./artist'); // Import the artist.js file
+const Song = require('./models/songs');
+const getArtistDetails = require('./artist'); 
 
 async function getSongDetails(songName) {
     try {
@@ -23,23 +23,20 @@ async function getSongDetails(songName) {
             const track = tracks[0];
 
             const artistDetails = await getArtistDetails(track.artists[0].name);
+            
             // Prepare the song details object
             const songDetails = {
                 songId: track.id,
                 songname: track.name,
-                artistId: artistDetails.artistId,
-                genre: artistDetails.genres,              
+                artists: track.artists.map(artist => artist.name),
+                genre: artistDetails.genres, 
+                //genres:track.genres,             
                 duration: track.duration_ms,
                 releasedate: track.album.release_date,
-                streams: track.popularity,  // Example: Using track popularity as streams
+                streams: track.popularity,  
                 explicity: track.explicit ? 'Yes' : 'No',  // Convert boolean to Yes/No
 
-                // ... (add other fields as needed)
             }; 
-
-            // Insert the song details into the MongoDB collection
-            const newSong = new Song(songDetails);
-            await newSong.save();
 
             return songDetails;
         } else {

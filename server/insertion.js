@@ -61,11 +61,26 @@ async function insertArtist(artistDetails) {
     }
 }
 
-  
+async function insertPlaylist(playlistDetails) {
+  try {
+    console.log('Playlist found:');
+    const existingPlaylist = await playlistModel.findOne({ playlistId: playlistDetails.playlistId });
+    if (!existingPlaylist) {
+      const newPlaylist = new playlistsModel(playlistDetails);
+      await newPlaylist.save();
+    } else {
+      console.log('Playlist already exists:', playlistDetails);
+    }
+  } catch (error) {
+    console.error('Error storing playlist details:', error);
+  }
+}
+
   
 
 module.exports = {
   insertAlbum,
   insertArtist,
-  insertSong
+  insertSong,
+  playlistsModel
 };

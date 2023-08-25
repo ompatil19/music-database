@@ -9,11 +9,11 @@ const songsSchema = new mongoose.Schema({
     songname:{
         type:String,     
     },
-    // artist: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'artistModel',
-    //     // required: true,
-    // },
+    artist: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'artistModel',
+        // required: true,
+    },
     genres:{
         type:Array,
         required:true,
