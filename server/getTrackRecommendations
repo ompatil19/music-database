@@ -1,0 +1,32 @@
+const axios = require('axios');
+
+async function getTrackRecommendations(seedTrackId) {
+    try { 
+      const recommendationsOptions = {
+        url: `https://api.spotify.com/v1/recommendations`,
+        method: 'get',
+        headers: {
+          'Authorization': `Bearer ${ACCESS_TOKEN}`
+        },
+        params: {
+          seed_tracks: seedTrackId,
+          limit: 10 // You can adjust the limit as needed
+        }
+      };
+  
+      const response = await axios(recommendationsOptions);
+      const recommendations = response.data.tracks.map(track => ({
+        trackName: track.name,
+        artists: track.artists.map(artist => artist.name),
+        // You can include additional details about the recommended tracks
+      }));
+  
+      return recommendations;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+
+
+  module.exports = getTrackRecommendations;

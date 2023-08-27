@@ -1,13 +1,13 @@
 const mongoose=require('mongoose');
 
-const songsSchema = new mongoose.Schema({
-    songId:{
+const tracksSchema = new mongoose.Schema({
+    trackId:{
         type:String,
         required:true,
         // unique:true, 
     },
-    songname:{
-        type:String,     
+    trackName:{
+        type:String     
     },
     artist: {
         type: mongoose.Schema.Types.ObjectId,
@@ -33,6 +33,6 @@ const songsSchema = new mongoose.Schema({
          
   });
 
-const songsModel = mongoose.model('songs', songsSchema);
+const tracksModel = mongoose.model('tracks', tracksSchema);
 
-module.exports = songsModel;
+module.exports = tracksModel;
