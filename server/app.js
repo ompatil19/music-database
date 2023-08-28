@@ -2,12 +2,13 @@ const express = require("express");
 const app = express();
 require('dotenv').config();
 
-const getArtistDetails = require('./artist'); // Import the artist.js file
+const getArtistDetails = require('./artist'); 
 const getAlbumDetails = require('./album');
-const getSongDetails = require('./songs');
+const getTrackDetails = require('./track');
 const getPlaylistDetails = require('./playlist');
+const getTrackRecommendations = require('./getTrackRecommendations');
 
-const getAccessToken = require('./getAccessToken'); // Import your access token function if not already done
+const getAccessToken = require('./getAccessToken'); 
 const insertionLogic = require('./insertion');
 
 const cors = require("cors");
@@ -16,59 +17,70 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 
-  app.get('/album/:albumName', async (req, res) => {
-    const albumName = req.params.albumName;
-    
-    try {
-        const albumDetails = await getAccessToken().then(()=>{getAlbumDetails(albumName)
-          .then(albumDetails => {
-            console.log('Album Details:', albumDetails);
-            res.json(albumDetails);
-           // insertionLogic.insertAlbum(albumDetails);
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-        });
-    } catch (error) {
-        res.status(404).json({ error: 'Album not found' });
-    }
-});
 
-
-app.post('/album/:albumName/insert', async (req, res) => {
+app.get('/album/:albumName', async (req, res) => {
   const albumName = req.params.albumName;
-    
-  try {
-      const albumDetails = await getAccessToken().then(()=>{getAlbumDetails(albumName)
-        .then(albumDetails => {
-          console.log('Album Details:', albumDetails);
-          insertionLogic.insertAlbum(albumDetails);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      });
-      res.json(albumDetails);
-  } catch (error) {
-      res.status(404).json({ error: 'Album not found' });
-  }
-});
 
-app.get('/artist/:artistName', async (req, res) => {
-  const artistName = req.params.artistName;
-  
   try {
-    const artistDetails = await  getAccessToken().then(() => {
-      getArtistDetails(artistName)
-        .then(artistDetails => {
-          console.log('Artist Details:', artistDetails);
+    const accessToken = await getAccessToken();
+    const albumDetails = await getAccessToken().then(() => {
+      getAlbumDetails(albumName)
+        .then(async albumDetails => {
+          console.log('Album Details:', albumDetails);
+          // const seedTracks = albumDetails.tracks.map(track => track.id);
+          // const seedArtists = albumDetails.artists.map(artist => artist.id);
+          // const recommendations = await getRecommendations(accessToken, seedTracks, seedArtists);
+          // console.log('Recommended tracks:', recommendations.tracks);
+          res.json({
+            albumDetails
+            // ,
+            // recommendedTracks: getRecommendations.tracks
+          });
         })
         .catch(error => {
           console.error('Error:', error);
         });
     });
-    res.json(artistDetails);
+  } catch (error) {
+    res.status(404).json({ error: 'Album not found' });
+  }
+});
+
+
+app.post('/album/:albumName/insert', async (req, res) => {
+  const albumName = req.params.albumName;
+
+  try {
+    const albumDetails = await getAccessToken().then(() => {
+      getAlbumDetails(albumName)
+        .then(albumDetails => {
+          console.log('Album Details:', albumDetails);
+          insertionLogic.insertAlbum(albumDetails);
+          res.json(albumDetails);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+  } catch (error) {
+    res.status(404).json({ error: 'Album not found' });
+  }
+});
+
+app.get('/artist/:artistName', async (req, res) => {
+  const artistName = req.params.artistName;
+
+  try {
+    const artistDetails = await getAccessToken().then(() => {
+      getArtistDetails(artistName)
+        .then(artistDetails => {
+          console.log('Artist Details:', artistDetails);
+          res.json(artistDetails);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
   } catch (error) {
     res.status(404).json({ error: 'Artist not found' });
   }
@@ -76,59 +88,63 @@ app.get('/artist/:artistName', async (req, res) => {
 
 app.post('/artist/:artistName/insert', async (req, res) => {
   const artistName = req.params.artistName;
-  
+
   try {
-    const artistDetails = await  getAccessToken().then(() => {
+    const artistDetails = await getAccessToken().then(() => {
       getArtistDetails(artistName)
         .then(artistDetails => {
           console.log('Artist Details:', artistDetails);
           insertionLogic.insertArtist(artistDetails);
+          res.json({ message: 'Artist details inserted successfully' });
         })
         .catch(error => {
           console.error('Error:', error);
         });
     });
-    res.json({ message: 'Artist details inserted successfully' });
   } catch (error) {
     res.status(400).json({ error: 'Error inserting artist details' });
   }
 });
 
-app.get('/song/:songName', async (req, res) => {
-  const songName = req.params.songName;
+
+app.get('/track/:trackName', async (req, res) => {
+  const trackName = req.params.trackName;
   
   try {
-    const songDetails = await getAccessToken().then(() => {
-      getSongDetails(songName)
-          .then(songDetails => {
-              console.log('Song Details:', songDetails);
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
-  });
-    res.json(songDetails);
+    const accessToken = await getAccessToken();
+    const trackDetails = await getTrackDetails(trackName);
+    const recommendations = await getTrackRecommendations(trackDetails.trackId);
+    
+    console.log('Track Details:', trackDetails);
+    console.log('Recommendations', recommendations);
+    
+    res.json({
+      trackDetails,
+      recommendations
+    });
   } catch (error) {
+    console.error('Error:', error);
     res.status(404).json({ error: 'Song not found' });
   }
 });
 
-app.post('/song/:songName/insert', async (req, res) => {
-  const songName = req.params.songName;
-  
+
+app.post('/track/:trackName/insert', async (req, res) => {
+  const trackName = req.params.trackName;
+
   try {
-    const songDetails = await getAccessToken().then(() => {
-      getSongDetails(songName)
-          .then(songDetails => {
-              console.log('Song Details:', songDetails);
-              insertionLogic.insertSong(songDetails);
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
-  });
-    insertionLogic.insertSong(songDetails);
-    res.json({ message: 'Song details inserted successfully' });
+    const trackDetails = await getAccessToken().then(() => {
+      getTrackDetails(trackName)
+        .then(trackDetails => {
+          console.log('Track Details:', trackDetails);
+          insertionLogic.insertTrack(trackDetails);
+          res.json({ message: 'Track details inserted successfully' });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+    
   } catch (error) {
     res.status(400).json({ error: 'Error inserting song details' });
   }
@@ -137,18 +153,18 @@ app.post('/song/:songName/insert', async (req, res) => {
 
 app.get('/playlist/:playlistName', async (req, res) => {
   const playlistName = req.params.playlistName;
-  
+
   try {
-    const playlistDetails = await   getAccessToken().then(() => {
+    const playlistDetails = await getAccessToken().then(() => {
       getPlaylistDetails(playlistName)
-          .then(playlistDetails => {
-              console.log('Playlist Details:', playlistDetails);
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
-  });
-    res.json(playlistDetails);
+        .then(playlistDetails => {
+          console.log('Playlist Details:', playlistDetails);
+          res.json(playlistDetails);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
   } catch (error) {
     res.status(404).json({ error: 'Playlist not found' });
   }
@@ -156,20 +172,20 @@ app.get('/playlist/:playlistName', async (req, res) => {
 
 app.post('/playlist/:playlistName/insert', async (req, res) => {
   const playlistName = req.params.playlistName;
-  
+
   try {
-    const playlistDetails = await   getAccessToken().then(() => {
+    const playlistDetails = await getAccessToken().then(() => {
       getPlaylistDetails(playlistName)
-          .then(playlistDetails => {
-              console.log('Playlist Details:', playlistDetails);
-              insertionLogic.insertPlaylist(playlistDetails); 
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
-  });
-    insertionLogic.insertPlaylist(playlistDetails);
-    res.json({ message: 'Playlist details inserted successfully' });
+        .then(playlistDetails => {
+          console.log('Playlist Details:', playlistDetails);
+          insertionLogic.insertPlaylist(playlistDetails);
+          res.json({ message: 'Playlist details inserted successfully' });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+    
   } catch (error) {
     res.status(400).json({ error: 'Error inserting playlist details' });
   }
