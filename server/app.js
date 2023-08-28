@@ -23,13 +23,13 @@ app.use(cors());
         const albumDetails = await getAccessToken().then(()=>{getAlbumDetails(albumName)
           .then(albumDetails => {
             console.log('Album Details:', albumDetails);
+            res.json(albumDetails);
            // insertionLogic.insertAlbum(albumDetails);
           })
           .catch(error => {
             console.error('Error:', error);
           });
         });
-        res.json(albumDetails);
     } catch (error) {
         res.status(404).json({ error: 'Album not found' });
     }

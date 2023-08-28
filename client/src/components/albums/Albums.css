@@ -10,7 +10,7 @@
     font-family: 'Montserrat', sans-serif;
 }
 .color-green{
-        color: rgb(0, 255, 170);
+        color: #FFD401;
 }
 .albumbox{
     width: 14em;
@@ -35,65 +35,68 @@
 
 
 /* button styling */
-.cta {
-    position: relative;
-    margin: auto;
-    padding: 12px 18px;
-    transition: all 0.2s ease;
-    border: none;
-    background: none;
-   }
-   
-   .cta:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-    border-radius: 50px;
-    background: azure;
-    width: 45px;
-    height: 45px;
-    transition: all 0.3s ease;
-   }
-   
-   .cta span {
-    position: relative;
-    font-family: "Ubuntu", sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: #234567;
-   }
-   
-   .cta svg {
-    position: relative;
-    top: 0;
-    margin-left: 10px;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke: #234567;
-    stroke-width: 2;
-    transform: translateX(-5px);
-    transition: all 0.3s ease;
-   }
-   
-   .cta:hover:before {
-    width: 100%;
-    background: #b1dae7;
-   }
-   
-   .cta:hover svg {
-    transform: translateX(0);
-   }
-   
-   .cta:active {
-    transform: scale(0.95);
-   }
-
-
-
+.btn {
+  margin: 0%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background: #183153;
+  font-family: "Montserrat", sans-serif;
+  box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border: none;
+ }
+ 
+ .btn:after {
+  content: " ";
+  width: 0%;
+  height: 100%;
+  background: #FFD401;
+  position: absolute;
+  transition: all 0.4s ease-in-out;
+  right: 0;
+ }
+ 
+ .btn:hover::after {
+  right: auto;
+  left: 0;
+  width: 100%;
+ }
+ 
+ .btn span {
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 1.125em;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  z-index: 20;
+  transition: all 0.3s ease-in-out;
+ }
+ 
+ .btn:hover span {
+  color: #183153;
+  animation: scaleUp 0.3s ease-in-out;
+ }
+ 
+ @keyframes scaleUp {
+  0% {
+   transform: scale(1);
+  }
+ 
+  50% {
+   transform: scale(0.95);
+  }
+ 
+  100% {
+   transform: scale(1);
+  }
+ }
+ 
 
 
    /* Text box styling */
@@ -149,3 +152,6 @@
   .input-alt:focus + .input-border-alt {
     width: 100%;
   }
+
+
+
