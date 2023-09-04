@@ -20,7 +20,6 @@ async function getPlaylistDetails(playlistName) {
         if (playlists.length > 0) {
             const playlist = playlists[0];
             const playlistId = playlist.id;
-
             const playlistDetailsOptions = {
                 url: `https://api.spotify.com/v1/playlists/${playlistId}`,
                 method: 'get',
