@@ -31,3 +31,17 @@ const artistsSchema = new mongoose.Schema({
 const artistsModel = mongoose.model('artists', artistsSchema);
 
 module.exports = artistsModel;
+
+// const mongoose = require("mongoose");
+
+// const artistSchema = new mongoose.Schema({
+//   _id: mongoose.Schema.Types.ObjectId, // Artist ID as primary key
+//   popularity: Number,
+//   artistName: String,
+//   genres: [String],
+//   followers: Number,
+// });
+
+// const Artist = mongoose.model("Artist", artistSchema);
+
+// module.exports = Artist;

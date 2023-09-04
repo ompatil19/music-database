@@ -14,14 +14,36 @@ const playlistsSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    pName:{
+    playlistName:{
         type:String,
         required:true,
         // unique:true,
-    }
+    },
+    tracks:{
+        type:Integer,
+        required:true,
+    },
    
   });
 
 const playlistsModel = mongoose.model('playlists', playlistsSchema);
 
 module.exports = playlistsModel;
+
+
+// const mongoose = require("mongoose");
+
+// const playlistSchema = new mongoose.Schema({
+//   _id: mongoose.Schema.Types.ObjectId, // Playlist ID as primary key
+//   playlistName: String,
+//   trackIds: [{
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "Track" // Reference to Track collection
+//   }],
+//   description: String,
+//   followers: Number,
+// });
+
+// const Playlist = mongoose.model("Playlist", playlistSchema);
+
+// module.exports = Playlist;
