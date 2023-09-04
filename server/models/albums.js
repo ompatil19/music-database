@@ -11,6 +11,9 @@ const albumSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    albumImage: {
+        type: String, // Assuming albumImage is a URL
+    },
     artist: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'artistsModel'
@@ -25,15 +28,15 @@ const albumSchema = new mongoose.Schema({
         type: Date,
 
     },
-    // totalTracks:{
-    //     type:mongoose.Schema.Types.ObjectId,
-    //     ref: 'tracksModel',
-    //     required: true,
-    // },
-    // genres:{
-    //     type:String,
-    //     // required:true
-    // } 
+    totalTracks:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'tracksModel',
+        required: true,
+    },
+    genres:{
+        type:String,
+        // required:true
+    } 
 
 });
 

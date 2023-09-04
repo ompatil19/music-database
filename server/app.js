@@ -27,15 +27,7 @@ app.get('/album/:albumName', async (req, res) => {
       getAlbumDetails(albumName)
         .then(async albumDetails => {
           console.log('Album Details:', albumDetails);
-          // const seedTracks = albumDetails.tracks.map(track => track.id);
-          // const seedArtists = albumDetails.artists.map(artist => artist.id);
-          // const recommendations = await getRecommendations(accessToken, seedTracks, seedArtists);
-          // console.log('Recommended tracks:', recommendations.tracks);
-          res.json({
-            albumDetails
-            // ,
-            // recommendedTracks: getRecommendations.tracks
-          });
+          res.json(albumDetails);
         })
         .catch(error => {
           console.error('Error:', error);
@@ -112,16 +104,28 @@ app.get('/track/:trackName', async (req, res) => {
   
   try {
     const accessToken = await getAccessToken();
+    const trackDetails = await getTrackDetails(trackName);    
+    console.log('Track Details:', trackDetails);    
+    res.json(trackDetails);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(404).json({ error: 'Song not found' });
+  }
+});
+
+app.get('/recommend/:trackName', async (req, res) => {
+  const trackName = req.params.trackName;
+  
+  try {
+    const accessToken = await getAccessToken();
     const trackDetails = await getTrackDetails(trackName);
     const recommendations = await getTrackRecommendations(trackDetails.trackId);
-    
-    console.log('Track Details:', trackDetails);
+
     console.log('Recommendations', recommendations);
     
-    res.json({
-      trackDetails,
+    res.json(
       recommendations
-    });
+    );
   } catch (error) {
     console.error('Error:', error);
     res.status(404).json({ error: 'Song not found' });

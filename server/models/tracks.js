@@ -9,6 +9,9 @@ const tracksSchema = new mongoose.Schema({
     trackName:{
         type:String     
     },
+    trackImage: {
+        type: String, // URL of the track's image
+    },
     artist: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'artistModel',
