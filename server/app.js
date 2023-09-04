@@ -218,6 +218,13 @@ app.post('/playlist/:playlistName/insert', async (req, res) => {
 // });
 
 
+const artistsController = require('./artistsController');
+
+const artistName = 'Taylor Swift'; // Replace with the artist name you want to search for
+
+getAccessToken().then(() => {artistsController.findAlbumsByArtistNameInTerminal(artistName)});
+
+
 
 app.listen(3001, () => {
   console.log("SERVER RUNS PERFECTLY!");
