@@ -36,8 +36,9 @@ function Artist() {
             <span>Get Artist</span>
           </button>
         </div>
-        {artistDetails && <div className='albumdet d-flex-column justify-content-center'>
+        {artistDetails && <div className='albumdet d-flex flex-column justify-content-center text-center'>
           <h1 className='color-green'>Artist Details</h1>
+          <img src={artistDetails.artistImage} alt={artistDetails.artistName} style={{ height: '200px', width: '200px', alignSelf:"center" }} />
           <p><span className='color-green'>ID:</span> {artistDetails.artistId}</p>
           <p><span className='color-green'>Name: </span>{artistDetails.artistName}</p>
           <p><span className='color-green'>Follower</span> {artistDetails.followers}</p>

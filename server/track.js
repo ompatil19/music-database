@@ -12,13 +12,13 @@ async function getTrackDetails(trackName,accessToken) {
             },
             params: {
                 q: trackName,
-                type: 'track'
+                type: 'track',
+                limit: 1
             }
         };
 
         const response = await axios(searchOptions);
         const tracks = response.data.tracks.items;
-
         if (tracks.length > 0) {
             const trackData = tracks[0];
             const artistDetails = await getArtistDetails(trackData.artists[0].name);

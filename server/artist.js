@@ -12,7 +12,8 @@ async function getArtistDetails(artistName) {
       },
       params: {
         q: artistName,
-        type: 'artist'
+        type: 'artist',
+        limit:1 
       }
     };
 
