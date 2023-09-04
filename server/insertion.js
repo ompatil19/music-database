@@ -7,7 +7,7 @@ const playlistsModel = require('./models/playlists');
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://mohit:chocolate01@cluster0.dsrdyr0.mongodb.net/');
+mongoose.connect('mongodb+srv://mohit:chocolate01@cluster0.dsrdyr0.mongodb.net/MusicRecSys');
 
 
 
