@@ -12,7 +12,8 @@ async function getAlbumDetails(albumName) {
       },
       params: {
         q: albumName,
-        type: 'album'
+        type: 'album',
+        limit:1
       }
     };
 

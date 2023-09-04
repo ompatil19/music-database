@@ -41,8 +41,9 @@ function Albums() {
             <span>Get Album</span>
           </button>
         </div>
-        {albumDetails && <div className='albumdet d-flex-column justify-content-center'>
+        {albumDetails && <div className='albumdet d-flex flex-column justify-content-center'>
           <h1 className='color-green'>Album Details</h1>
+          <img src={albumDetails.albumImage} alt={albumDetails.albumName} style={{ height: '200px', width: '200px', alignSelf:"center" }} />
           <p><span className='color-green'>ID:</span> {albumDetails.albumId}</p>
           <p><span className='color-green'>Name: </span>{albumDetails.albumName}</p>
           <p><span className='color-green'>Artists:</span> {albumDetails.artists}</p>
