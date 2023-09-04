@@ -34,10 +34,13 @@ async function getAlbumDetails(albumName) {
       const albumResponse = await axios(albumDetailsOptions);
       const detailedAlbum = albumResponse.data;
 
+      const albumImageUrl = detailedAlbum.images[0].url;
+
       // Prepare and return the album details
       const albumDetails = {
         albumId: albumId,
         albumName: detailedAlbum.name,
+        albumImage: albumImageUrl, 
         artists: detailedAlbum.artists.map(artist => artist.name),
         tracks: detailedAlbum.tracks.items.map(track => track.name),
         releaseDate: detailedAlbum.release_date,

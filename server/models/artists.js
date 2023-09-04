@@ -10,6 +10,9 @@ const artistsSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    artistImage: {
+        type: String, // Assuming albumImage is a URL
+    },
     followers:{
         type:String,
         required:true,

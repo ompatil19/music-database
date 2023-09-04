@@ -20,7 +20,7 @@ const playlistsSchema = new mongoose.Schema({
         // unique:true,
     },
     tracks:{
-        type:Number,
+        type:String,
         required:true,
     },
    

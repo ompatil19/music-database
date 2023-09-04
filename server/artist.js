@@ -19,6 +19,8 @@ async function getArtistDetails(artistName) {
     const response = await axios(searchOptions);
     const artists = response.data.artists.items;
 
+    
+
     if (artists.length > 0) {
       const artist = artists[0];
 
@@ -33,10 +35,16 @@ async function getArtistDetails(artistName) {
       const artistResponse = await axios(artistDetailsOptions);
       const detailedArtist = artistResponse.data;
 
+      let artistImage = null;
+      if (detailedArtist.images && detailedArtist.images.length > 0) {
+          artistImage = detailedArtist.images[0].url; // Assuming the first image is the artist's image
+      }
+
       // Prepare and return the artist details
       const artistDetails = {
         artistId: detailedArtist.id,
         artistName: detailedArtist.name,
+        artistImage: artistImage, 
         followers: detailedArtist.followers.total,
         popularity: detailedArtist.popularity,
         genres: detailedArtist.genres,
