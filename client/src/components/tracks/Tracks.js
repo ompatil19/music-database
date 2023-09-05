@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios';
 import { useState } from 'react'
+import {GiGuitar} from 'react-icons/gi'
 function Tracks() {
   const [trackDetails, setTrackDetails] = useState("");
   const [trackname, setTrackname] = useState("");
@@ -26,9 +27,8 @@ function Tracks() {
     <div className="container d-flex text-center box justify-content-around align-items-center">
 
       <div className='albumfetch d-flex flex-column align-items-center'>
-        {/* <MdOutlineArtTrack className='albumicon' /> */}
-        {/* <IoMdAlbums className='albumicon' /> */}
-        <h1 className='color-green'>Track</h1>
+        <GiGuitar className='albumicon' />
+        <h1 className='color-green'>Tracks</h1>
         <input type="text" name="title" id="title" placeholder="Track Name" onChange={changetrackname} className='albumbox' />
         {/* <input type="button" value="Get album" onClick={getalbum} /> */} <br />
         <button className="btn" onClick={gettrack}>
