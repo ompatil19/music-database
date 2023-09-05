@@ -35,10 +35,10 @@ async function insertArtist(artistDetails) {
 
     if (!existingArtist) {
       const newArtist = new artistModel(artistDetails);
-
       await newArtist.save();
     } else {
       console.log('Artist already exists:', artistDetails);
+      // res.json({"status":"Artist already exists"})
     }
   } catch (error) {
     console.error('Error storing artist details:', error);

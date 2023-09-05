@@ -15,8 +15,9 @@ function Navbar() {
         <li className="nav-item"><a className="nav-link active" href="/artist">Artist</a></li>
         <li className="nav-item"><a className="nav-link active" href="/tracks">Tracks</a></li>
         {/* <li className="nav-item"><a className="nav-link active" href="#">Users</a></li> */}
-        <li className="nav-item"><a className="nav-link active" href="/playlists">Playlists</a></li>
+        {/* <li className="nav-item"><a className="nav-link active" href="/playlists">Playlists</a></li> */}
         <li className="nav-item"><a className="nav-link active" href="/recommendations">Recommendations</a></li>
+        <li className="nav-item"><a className="nav-link active" href="/updater">Updater</a></li>
       </ul>
     </div>
   </div>

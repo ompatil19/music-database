@@ -1,14 +1,17 @@
 import React from 'react'
 import { useState } from 'react'
 import axios from 'axios';
+import {BsFillPersonLinesFill} from 'react-icons/bs'
 function Artist() {
   const [artistDetails, setartistDetails] = useState("");
   const [artistname, setartistname] = useState("");
+  const [addingstatus, setaddingstatus] = useState("");
   const changeartistname = (e) => {
     setartistname(e.target.value);
   }
   let artist_details = {};
   const getartist = (e) => {
+    setaddingstatus("");
     axios.get(`http://localhost:3001/artist/${artistname}`).then((response) => {
       artist_details = response.data;
       const fetchedArtistDetails = response.data;
@@ -19,6 +22,8 @@ function Artist() {
   const addArtistToDB = (e) => {
     axios.post(`http://localhost:3001/artist/${artistname}/insert`).then((response) => {
       console.log("Artist inserted to db: ", response.data);
+      console.log("Message is",response.data.message);
+      setaddingstatus(response.data.message);
     });
   }
   return (
@@ -27,7 +32,7 @@ function Artist() {
 
         <div className='albumfetch d-flex flex-column align-items-center'>
           {/* <MdOutlineArtTrack className='albumicon' /> */}
-          {/* <IoMdAlbums className='albumicon' /> */}
+          <BsFillPersonLinesFill className='albumicon' />
           <h1 className='color-green'>Artist</h1>
           <input type="text" name="title" id="title" placeholder="Album Name" onChange={changeartistname} className='albumbox' />
 
@@ -46,6 +51,7 @@ function Artist() {
           <button className="btn" onClick={addArtistToDB}>
             <span>Add Artist</span>
           </button>
+          {addingstatus && <p>{addingstatus}</p>}
         </div>}
       </div>
     </>

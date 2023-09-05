@@ -7,6 +7,7 @@ import Tracks from './components/tracks/Tracks';
 import Artist from './components/artist/Artist';
 import Playlist from './components/playlist/Playlist';
 import Recommendation from './components/recommendation/Recommendation';
+import Updater from './components/updater/Updater';
 function App() {
   return (
     <>
@@ -20,6 +21,7 @@ function App() {
         <Route path="/tracks" element={<Tracks/>}/>
         <Route path="/playlists" element={<Playlist/>}/>
         <Route path='/recommendations' element={<Recommendation/>}></Route>
+        <Route path='/updater' element={<Updater/>}></Route>
       </Routes>
     </Router>
     </>
