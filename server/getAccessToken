@@ -5,7 +5,8 @@ const querystring = require("querystring");
 
 const axios = require('axios');
 
-  
+let ACCESS_TOKEN;
+
 function getAccessToken() {
   const authOptions = {
     url: 'https://accounts.spotify.com/api/token',
