@@ -12,7 +12,7 @@ function Navbar() {
     <div className="collapse navbar-collapse" id="navbarNav">
       <ul className="navbar-nav ms-auto">
         <li className="nav-item"><a className="nav-link active" aria-current="page" href="/albums">Album</a></li>
-        <li className="nav-item"><a className="nav-link active" href="/artist">Artist</a></li>
+        <li className="nav-item"><a className="nav-link active" href="/artists">Artist</a></li>
         <li className="nav-item"><a className="nav-link active" href="/tracks">Tracks</a></li>
         {/* <li className="nav-item"><a className="nav-link active" href="#">Users</a></li> */}
         {/* <li className="nav-item"><a className="nav-link active" href="/playlists">Playlists</a></li> */}

@@ -86,7 +86,7 @@ app.post('/artist/:artistName/insert', async (req, res) => {
       getArtistDetails(artistName)
         .then(artistDetails => {
           console.log('Artist Details:', artistDetails);
-          insertionLogic.insertArtist(artistDetails);
+          result=insertionLogic.insertArtist(artistDetails);
           res.json({ message: 'Artist details inserted successfully' });
         })
         .catch(error => {

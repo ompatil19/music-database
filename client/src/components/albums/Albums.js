@@ -7,6 +7,7 @@ import { IoMdAlbums } from 'react-icons/io'
 function Albums() {
   const [albumname, setalbumname] = useState("");
   const [albumDetails, setAlbumDetails] = useState(null);
+  const [addingstatus, setaddingstatus] = useState("");
   const changealbumname = (e) => {
     setalbumname(e.target.value);
     console.log("Album name: ", albumname);
@@ -24,6 +25,7 @@ function Albums() {
   const addalbumtodb = (e) => {
     axios.post(`http://localhost:3001/album/${albumname}/insert`).then((response) => {
       console.log("Album inserted to db: ", response.data);
+      setaddingstatus(response.data.message);
     });
   }
   return (
@@ -52,6 +54,7 @@ function Albums() {
           <button className="btn" onClick={addalbumtodb}>
             <span>Add Album</span>
           </button>
+        {addingstatus && <p>{addingstatus}</p>}
         </div>}
       </div>
     </>
