@@ -196,29 +196,6 @@ app.post('/playlist/:playlistName/insert', async (req, res) => {
 });
 
 
-// //Route to get data from database
-// app.get("/getUsers", (req, res) => {
-//   UserModel.find({}, (err, result) => {
-//     if (err) {
-//       res.json(err);
-//     } else {
-//       res.json(result);
-//     }
-//   });
-// });
-
-
-// //Route to add data to database
-// app.post("/createUser", async (req, res) => {
-//   const user = req.body;
-//   const newUser = new UserModel(user);
-//   await newUser.save();
-
-//   res.json(user);
-// });
-
-
-
 app.listen(3001, () => {
   console.log("SERVER RUNS PERFECTLY!");
 });
