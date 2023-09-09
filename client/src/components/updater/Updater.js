@@ -4,14 +4,12 @@ import { useState } from 'react'
 import axios from 'axios';
 import {MdOutlineBrowserUpdated} from 'react-icons/md'
 function Updater() {
-  const [artistname, setartistname] = useState("");
+  const [artistName, setArtistName] = useState("");
   const [newartistname, setnewartistname] = useState("");
-  const [artistDetails, setartistDetails] = useState("a");
+  const [artistDetails, setartistDetails] = useState("");
   // const [addingstatus, setaddingstatus] = useState("");
-const [artistName, setArtistName] = useState("");
-const [foundArtist, setFoundArtist] = useState("a");
-const [continueUpdate, setContinueUpdate] = useState("1");  
-const [updateStatus, setUpdateStatus] = useState("a");
+const [foundArtist, setFoundArtist] = useState("");
+const [updateStatus, setUpdateStatus] = useState("");
 const changeartistname = (e) => {
   setArtistName(e.target.value);
 }
@@ -20,29 +18,30 @@ const changenewartistname = (e) => {
 }
 let artist_details = {};
 const getartist = (e) => {
-  axios.get(`http://localhost:3001/api/getArtists`).then((response) => {
+  axios.get(`http://localhost:3001/api/getArtists?artistName=${artistName}`).then((response) => {
     artist_details = response.data;
-    const fetchedArtistDetails = response.data;
+    const fetchedArtistDetails = response.data.artist;
     setartistDetails(fetchedArtistDetails);
     setFoundArtist(response.data.message);
-    console.log("Artist details found sucessful: ", artist_details);
+    setUpdateStatus("");
   });
 }
 const updateartist = (e) => {
-  axios.post(`http://localhost:3001/api/updateArtist`, {artistName, newartistname}).then((response) => {
+  axios.put(`http://localhost:3001/api/updateArtist`, {currentName: artistName, newName: newartistname}).then((response) => {
+    console.log(artistName, newartistname );
     console.log("Artist updated to db: ", response.data);
     setUpdateStatus(response.data.message);
   });
 }
   return (
     <>
-      <div className="container d-flex text-center box justify-content-between align-items-center">
+      <div className="container d-flex text-center box justify-content-center align-items-center">
         <div className='albumfetch d-flex flex-column align-items-center'>
           <MdOutlineBrowserUpdated className='albumicon' />
-          <h1 className='color-green'>Tracks</h1>
-          <input type="text" name="title" id="title" placeholder="Track Name" onChange={changeartistname} className='albumbox' />
+          <h1 className='color-green'>Artists Updater</h1>
+          <input type="text" name="title" id="title" placeholder="Artist Name" onChange={changeartistname} className='albumbox' />
           <button className="btn mt-4" onClick={getartist}>
-            <span>Get Track</span>
+            <span>Get Artist</span>
           </button>
           {foundArtist && <p className='mt-3'>{foundArtist}</p>}
         </div>
@@ -63,7 +62,9 @@ const updateartist = (e) => {
 
 
 
-         {artistDetails && <div className='albumdet d-flex flex-column justify-content-center text-center'> <p>Enter Artist name </p> <input type="text" name="newName" id="title" placeholder="Track Name" onChange={changenewartistname} className='albumbox'/>
+         {artistDetails && <div className='albumdet d-flex flex-column justify-content-center text-center'> 
+         <h1 className='color-green'>New Artist name</h1>
+ <input type="text" name="newName" id="title" placeholder="Artist Name" onChange={changenewartistname} className='albumbox'/>
           <button className="btn mt-4" onClick={updateartist}>
             <span>Update Artist</span>
           </button>

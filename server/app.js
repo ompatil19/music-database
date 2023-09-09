@@ -212,9 +212,9 @@ app.put('/api/updateArtist', async (req, res) => {
       );
 
       if (!updatedArtist) {
-          return res.status(404).json({ message: 'Artist not found' });
+          return res.json({ message: 'Artist not found' });
       } else {
-          return res.status(200).json({ message: 'Artist updated successfully' });
+          return res.json({ message: 'Artist updated successfully' });
       }
   } catch (error) {
       console.error('Error:', error);
@@ -239,7 +239,7 @@ app.get('/api/getArtists', async (req, res) => {
       const artist = await Artist.findOne({ artistName });
 
       if (!artist) {
-          return res.status(404).json({ message: 'Artist not found' });
+          return res.json({ message: 'Artist not found' });
       }
 
       return res.status(200).json({ artist });
