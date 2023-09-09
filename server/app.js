@@ -232,27 +232,23 @@ app.put('/api/updateArtist', async (req, res) => {
 //       return res.status(500).json({ message: 'Internal server error' });
 //   }
 // });
-app.get('/api/updateArtist', async (req, res) => {
-  const currentName = req.query.currentName;
-  const newName = req.query.newName;
+app.get('/api/getArtists', async (req, res) => {
+  const artistName = req.query.artistName;
   
   try {
-      const updatedArtist = await Artist.findOneAndUpdate(
-          { artistName: currentName },
-          { $set: { artistName: newName } },
-          { new: true }
-      );
+      const artist = await Artist.findOne({ artistName });
 
-      if (!updatedArtist) {
+      if (!artist) {
           return res.status(404).json({ message: 'Artist not found' });
       }
 
-      return res.status(200).json({ message: 'Artist updated successfully', updatedArtist });
+      return res.status(200).json({ artist });
   } catch (error) {
       console.error('Error:', error);
       return res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 
 app.listen(3001, () => {
