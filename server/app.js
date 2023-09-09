@@ -250,6 +250,26 @@ app.get('/api/getArtists', async (req, res) => {
 });
 
 
+app.delete('/api/deleteArtist', async (req, res) => {
+  const artistName = req.query.artistName;
+
+  try {
+      const deletedArtist = await Artist.findOneAndDelete({ artistName });
+
+      if (!deletedArtist) {
+          return res.status(404).json({ message: 'Artist not found' });
+      }
+
+      return res.status(200).json({ message: 'Artist deleted successfully', deletedArtist });
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  } finally {
+      mongoose.disconnect();
+  }
+});
+
+
 
 app.listen(3001, () => {
   console.log("SERVER RUNS PERFECTLY!");
