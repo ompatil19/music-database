@@ -36,7 +36,10 @@ const albumSchema = new mongoose.Schema({
     genres:{
         type:String,
         // required:true
-    } 
+    },
+    total: {
+        type: Number,
+    }
 
 });
 
