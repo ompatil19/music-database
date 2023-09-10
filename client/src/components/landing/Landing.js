@@ -10,9 +10,9 @@ function Landing() {
           <p className='mt-3'>Elevate Your <span>Music</span> Experience with AI-Powered <span>Recommendations</span></p>
           <div className="conatiner mt-4 d-flex flex-wrap  align-items-center justify-content-between button-box">
             <a href='/albums' className='link-underline link-underline-opacity-0'><button className="btn1 mt-2"><span>Albums</span></button></a>
-            <a href='/artist' className='link-underline link-underline-opacity-0'><button className="btn1 mt-2"><span>Artists</span></button></a>
+            <a href='/artists' className='link-underline link-underline-opacity-0'><button className="btn1 mt-2"><span>Artists</span></button></a>
             <a href='/tracks' className='link-underline link-underline-opacity-0'><button className="btn1 mt-2"><span>Tracks</span></button></a>
-            <a href='' className='link-underline link-underline-opacity-0'><button className="btn1 mt-2"><span>Recommendations</span></button></a>
+            <a href='/recommendations' className='link-underline link-underline-opacity-0'><button className="btn1 mt-2"><span>Recommendations</span></button></a>
           </div>
         </div>
         {window.innerWidth >= 1179 && 
