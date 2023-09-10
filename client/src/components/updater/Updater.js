@@ -35,7 +35,7 @@ const updateartist = (e) => {
 }
   return (
     <>
-      <div className="container d-flex text-center box justify-content-center align-items-center">
+      <div className="container d-flex text-center box justify-content-around align-items-center">
         <div className='albumfetch d-flex flex-column align-items-center'>
           <MdOutlineBrowserUpdated className='albumicon' />
           <h1 className='color-green'>Artists Updater</h1>
@@ -63,6 +63,7 @@ const updateartist = (e) => {
 
 
          {artistDetails && <div className='albumdet d-flex flex-column justify-content-center text-center'> 
+         <img src="" alt="" />
          <h1 className='color-green'>New Artist name</h1>
  <input type="text" name="newName" id="title" placeholder="Artist Name" onChange={changenewartistname} className='albumbox'/>
           <button className="btn mt-4" onClick={updateartist}>

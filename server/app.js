@@ -7,9 +7,7 @@ const bodyParser = require('body-parser');
 const getArtistDetails = require('./artist'); 
 const getAlbumDetails = require('./album');
 const getTrackDetails = require('./track');
-const getPlaylistDetails = require('./playlist');
 const getTrackRecommendations = require('./getTrackRecommendations');
-
 const getAccessToken = require('./getAccessToken'); 
 const insertionLogic = require('./insertion');
 
@@ -19,8 +17,7 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 mongoose.connect('mongodb+srv://mohit:chocolate01@cluster0.dsrdyr0.mongodb.net/MusicRecSys', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+
 }).then(console.log("Connected to mongo DB"));
 
 app.get('/album/:albumName', async (req, res) => {
@@ -160,46 +157,6 @@ app.post('/track/:trackName/insert', async (req, res) => {
 });
 
 
-app.get('/playlist/:playlistName', async (req, res) => {
-  const playlistName = req.params.playlistName;
-
-  try {
-    const playlistDetails = await getAccessToken().then(() => {
-      getPlaylistDetails(playlistName)
-        .then(playlistDetails => {
-          console.log('Playlist Details:', playlistDetails);
-          res.json(playlistDetails);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    });
-  } catch (error) {
-    res.status(404).json({ error: 'Playlist not found' });
-  }
-});
-
-app.post('/playlist/:playlistName/insert', async (req, res) => {
-  const playlistName = req.params.playlistName;
-
-  try {
-    const playlistDetails = await getAccessToken().then(() => {
-      getPlaylistDetails(playlistName)
-        .then(playlistDetails => {
-          console.log('Playlist Details:', playlistDetails);
-          insertionLogic.insertPlaylist(playlistDetails);
-          res.json({ message: 'Playlist details inserted successfully' });
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    });
-    
-  } catch (error) {
-    res.status(400).json({ error: 'Error inserting playlist details' });
-  }
-});
-
 
 app.put('/api/updateArtist', async (req, res) => {
   const { currentName, newName } = req.body;
@@ -222,16 +179,6 @@ app.put('/api/updateArtist', async (req, res) => {
   }
 });
 
-// app.get('/api/getArtists', async (req, res) => {
-//   try {
-       
-//       const artists = await Artist.find({});
-//       return res.json(artists);
-//   } catch (error) {
-//       console.error('Error:', error);
-//       return res.status(500).json({ message: 'Internal server error' });
-//   }
-// });
 app.get('/api/getArtists', async (req, res) => {
   const artistName = req.query.artistName;
   
@@ -269,7 +216,23 @@ app.delete('/api/deleteArtist', async (req, res) => {
   }
 });
 
+app.delete('/api/deleteArtist', async (req, res) => {
+  const artistName = req.query.artistName;
 
+  try {
+      const deletedArtist = await Artist.findOneAndDelete({ artistName });
+      if (!deletedArtist) {
+          return res.status(404).json({ message: 'Artist not found' });
+      }
+
+      return res.status(200).json({ message: 'Artist deleted successfully', deletedArtist });
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  } finally {
+      mongoose.disconnect();
+  }
+});
 
 app.listen(3001, () => {
   console.log("SERVER RUNS PERFECTLY!");

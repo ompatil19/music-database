@@ -28,7 +28,7 @@ function Artist() {
   }
   return (
     <>
-      <div className="container d-flex text-center box justify-content-around align-items-center">
+      <div className="container d-flex text-center box justify-content-around align-items-center flex-wrap">
 
         <div className='albumfetch d-flex flex-column align-items-center'>
           {/* <MdOutlineArtTrack className='albumicon' /> */}

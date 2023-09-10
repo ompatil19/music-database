@@ -8,12 +8,12 @@ import Artist from './components/artist/Artist';
 import Playlist from './components/playlist/Playlist';
 import Recommendation from './components/recommendation/Recommendation';
 import Updater from './components/updater/Updater';
+import Delete from './components/delete/Delete';
 function App() {
   return (
     <>
     <Router>
       <Navbar />
-      {/* <Background_card/> */}
       <Routes> 
         <Route path="/" element={<Landing/>} />
         <Route path="/albums" element={<Albums/>} />
@@ -22,6 +22,7 @@ function App() {
         <Route path="/playlists" element={<Playlist/>}/>
         <Route path='/recommendations' element={<Recommendation/>}></Route>
         <Route path='/updater' element={<Updater/>}></Route>
+        <Route path='/delete' element={<Delete/>}></Route>
       </Routes>
     </Router>
     </>

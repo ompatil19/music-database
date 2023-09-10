@@ -7,9 +7,9 @@
 .hero h1 span, .hero p span{
     color: #FFD401;
 }
-.container .container{
+/* .container .container{
     height: 80vh;
-}
+} */
 .image img{
     height: 40em;
     border-radius: 10px;
@@ -18,7 +18,16 @@
 /* .hero-content{
     width: 50em;
 } */
-
+.hero-content{
+    width: 60%;
+    margin: 0;
+}
+.button-box{
+    width: 100%;
+}
+.landbox{
+    min-height: 80vh;
+}
 
 
 

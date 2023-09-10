@@ -3,7 +3,7 @@ import './Navbar.css'
 function Navbar() {
   return (
     <>
-    <nav className="navbar navbar-expand-lg custom-nav">
+    <nav className="navbar navbar-expand-lg custom-nav sticky-top">
   <div className="container-fluid">
     <a className="navbar-brand" href="/">Chordistry</a>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,8 @@ function Navbar() {
         {/* <li className="nav-item"><a className="nav-link active" href="#">Users</a></li> */}
         {/* <li className="nav-item"><a className="nav-link active" href="/playlists">Playlists</a></li> */}
         <li className="nav-item"><a className="nav-link active" href="/recommendations">Recommendations</a></li>
-        <li className="nav-item"><a className="nav-link active" href="/updater">Updater</a></li>
+        <li className="nav-item"><a className="nav-link active" href="/updater">Update Artist</a></li>
+        <li className="nav-item"><a className="nav-link active" href="/delete">Delete Artist</a></li>
       </ul>
     </div>
   </div>
