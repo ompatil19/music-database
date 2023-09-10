@@ -15,9 +15,9 @@ function Recommendation() {
     })};
     return (
       <>
-      <div className="container recom-section d-flex justify-content-around align-items-center">
+      <div className="container recom-section d-flex justify-content-around align-items-center flex-wrap">
       <div>
-        <h1 className='text-center mb-5'>Recommendations</h1>
+        <h1 className='text-center mb-5 mt-5'>Recommendations</h1>
         <div className="d-flex flex-column align-items-center justify-content-center flex-wrap">
           <input type="text" name="title" id="title" placeholder="Track Name" onChange={changetrackname} className='albumbox me-5' />
           <button className="btn mt-5" onClick={getrecom}>
@@ -25,7 +25,7 @@ function Recommendation() {
           </button>
         </div>
       </div>
-        {details && <div>
+        {details && <div className='mt-5'>
 
           <ul>
             {details.map((track, index) => (

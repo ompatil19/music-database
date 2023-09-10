@@ -8,7 +8,6 @@ function Albums() {
   const [albumname, setalbumname] = useState("");
   const [albumDetails, setAlbumDetails] = useState(null);
   const [addingstatus, setaddingstatus] = useState("");
-
   const changealbumname = (e) => {
     setalbumname(e.target.value);
     console.log("Album name: ", albumname);

@@ -6,7 +6,6 @@ function Tracks() {
   const [trackDetails, setTrackDetails] = useState("");
   const [trackname, setTrackname] = useState("");
   const [addingstatus, setaddingstatus] = useState("");
-
   const changetrackname = (e) => {
     setTrackname(e.target.value);
   }
@@ -23,7 +22,6 @@ function Tracks() {
   const addTrackToDB = (e) => {
     axios.post(`http://localhost:3001/track/${trackname}/insert`).then((response) => {
       console.log("Track inserted to db: ", response.data);
-      console.log("Message is",response.data.message);
       setaddingstatus(response.data.message);
     });
   }

@@ -32,6 +32,13 @@ const albumSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'tracksModel'
     },
+    genres:{
+        type:String,
+        // required:true
+    },
+    total: {
+        type: Number,
+    }
 
 });
 
