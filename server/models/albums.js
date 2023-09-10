@@ -30,8 +30,7 @@ const albumSchema = new mongoose.Schema({
     },
     totalTracks:{
         type:mongoose.Schema.Types.ObjectId,
-        ref: 'tracksModel',
-        required: true,
+        ref: 'tracksModel'
     },
     genres:{
         type:String,
