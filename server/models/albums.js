@@ -5,7 +5,6 @@ const albumSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        index: true
     },
     albumName: {
         type: String,
@@ -19,11 +18,6 @@ const albumSchema = new mongoose.Schema({
         ref: 'artistsModel'
         // required: true,
     },
-
-    tracks: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'tracksModel'
-    },
     releaseDate: {
         type: Date,
 
@@ -32,14 +26,6 @@ const albumSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'tracksModel'
     },
-    genres:{
-        type:String,
-        // required:true
-    },
-    total: {
-        type: Number,
-    }
-
 });
 
 const albumsModel = mongoose.model('album', albumSchema);

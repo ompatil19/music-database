@@ -57,7 +57,7 @@ function Albums() {
           <button className="btn" onClick={addalbumtodb}>
             <span>Add Album</span>
           </button>
-          {addingstatus && <p>{addingstatus}</p>}
+          {addingstatus && <p className='mt-4'>{addingstatus}</p>}
         </div>}
       </div>
     </>

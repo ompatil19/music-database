@@ -29,7 +29,7 @@ app.get('/album/:albumName', async (req, res) => {
     const albumDetails = await getAccessToken().then(() => {
       getAlbumDetails(albumName)
         .then(async albumDetails => {
-          console.log('Album Details:', albumDetails);
+          // console.log('Album Details:', albumDetails);
           res.json(albumDetails);
         })
         .catch(error => {
@@ -48,7 +48,7 @@ app.get('/artist/:artistName', async (req, res) => {
     const artistDetails = await getAccessToken().then(() => {
       getArtistDetails(artistName)
         .then(artistDetails => {
-          console.log('Artist Details:', artistDetails);
+          // console.log('Artist Details:', artistDetails);
           res.json(artistDetails);
         })
         .catch(error => {
@@ -60,34 +60,13 @@ app.get('/artist/:artistName', async (req, res) => {
   }
 });
 
-app.post('/artist/:artistName/insert', async (req, res) => {
-  const artistName = req.params.artistName;
-
-  try {
-    const artistDetails = await getAccessToken().then(() => {
-      getArtistDetails(artistName)
-        .then(artistDetails => {
-          console.log('Artist Details:', artistDetails);
-          result=insertionLogic.insertArtist(artistDetails);
-          res.json({ message: 'Artist details inserted successfully' });
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    });
-  } catch (error) {
-    res.status(400).json({ error: 'Error inserting artist details' });
-  }
-});
-
-
 app.get('/track/:trackName', async (req, res) => {
   const trackName = req.params.trackName;
 
   try {
     const accessToken = await getAccessToken();
     const trackDetails = await getTrackDetails(trackName);
-    console.log('Track Details:', trackDetails);
+    // console.log('Track Details:', trackDetails);
     res.json(trackDetails);
   } catch (error) {
     console.error('Error:', error);
@@ -103,7 +82,7 @@ app.get('/recommend/:trackName', async (req, res) => {
     const trackDetails = await getTrackDetails(trackName);
     const recommendations = await getTrackRecommendations(trackDetails.trackId);
 
-    console.log('Recommendations', recommendations);
+    // console.log('Recommendations', recommendations);
 
     res.json(
       recommendations
@@ -119,28 +98,26 @@ const albumsModel = require('./models/albums');
 const artistsModel = require('./models/artists');
 const tracksModel = require('./models/tracks');
 
-const mongoose = require('mongoose');
-
-mongoose.connect('mongodb+srv://mohit:chocolate01@cluster0.dsrdyr0.mongodb.net/MusicRecSys');
 
 
 app.post('/artist/:artistName/insert', async (req, res) => {
   const artistName = req.params.artistName;
+  
   try {
-    // Check if the artist with the same name already exists
-    const existingArtist = await artistsModel.findOne({ artistName });
-    console.log("Artist found: " + existingArtist);
-    if (!existingArtist) {
-      // If the artist does not exist, insert artist details
-      const artistDetails = await getAccessToken().then(() => {
-        return getArtistDetails(artistName);    });
+    const artistDetails = await getAccessToken().then(() => {
+      return getArtistDetails(artistName);
+    });
 
-      if (!artistDetails) {
-        // Handle the case where artist details couldn't be retrieved
-        console.error('Error: Artist details not found');
-        res.status(500).json({ error: 'Error retrieving artist details' });
-        return;
-      }
+    if (!artistDetails) {
+      console.error('Error: Artist details not found');
+      res.status(500).json({ error: 'Error retrieving artist details' });
+      return;
+    }
+    console.log('Artist Details:', artistDetails);
+    const spotifyId = artistDetails.artistId;
+    const existingArtist = await artistsModel.findOne({artistId:spotifyId});
+    // console.log('Existing Artist:', existingArtist);
+    if (!existingArtist) {
       const newArtist = new artistsModel(artistDetails);
       await newArtist.save();
       res.json({ message: 'Artist details inserted successfully' });
@@ -153,22 +130,23 @@ app.post('/artist/:artistName/insert', async (req, res) => {
     res.status(400).json({ error: 'Error inserting artist details' });
   }
 });
-
 app.post('/album/:albumName/insert', async (req, res) => {
   const albumName = req.params.albumName;
-try{
-  const existingAlbum = await albumsModel.findOne({ albumName });
-  console.log("Album found", existingAlbum);
+
+  try {
+    const albumDetails = await getAccessToken().then(() => {
+      return getAlbumDetails(albumName);
+    });
+
+    if (!albumDetails) {
+      console.error('Error: Album details not found');
+      res.status(500).json({ error: 'Error retrieving album details' });
+      return;
+    }
+    const spotifyId = albumDetails.albumId;
+    const existingAlbum = await albumsModel.findOne({ albumId:spotifyId });
+
     if (!existingAlbum) {
-      const albumDetails = await getAccessToken().then(() => {
-        return getAlbumDetails(albumName);
-      });
-      if (!albumDetails) {
-        // Handle the case where album details couldn't be retrieved
-        console.error('Error: Album details not found');
-        res.status(500).json({ error: 'Error retrieving album details' });
-        return;
-      }
       const newAlbum = new albumsModel(albumDetails);
       await newAlbum.save();
       res.json({ message: 'Album details inserted successfully' });
@@ -186,20 +164,19 @@ app.post('/track/:trackName/insert', async (req, res) => {
   const trackName = req.params.trackName;
 
   try {
-  const existingTrack = await tracksModel.findOne({ trackName });
+    const trackDetails = await getAccessToken().then(() => {
+      return getTrackDetails(trackName);
+    });
 
-  if (!existingTrack) {
+    if (!trackDetails) {
+      console.error('Error: Track details not found');
+      res.status(500).json({ error: 'Error retrieving track details' });
+      return;
+    }
+    const spotifyId = trackDetails.trackId;
+    const existingTrack = await tracksModel.findOne({ trackId:spotifyId });
 
-        const trackDetails = await getAccessToken().then(() => {
-          return getTrackDetails(trackName);
-        });
-
-        if (!trackDetails) {
-          // Handle the case where track details couldn't be retrieved
-          console.error('Error: Track details not found');
-          res.status(500).json({ error: 'Error retrieving track details' });
-          return;
-        }
+    if (!existingTrack) {
       const newTrack = new tracksModel(trackDetails);
       await newTrack.save();
       res.json({ message: 'Track details inserted successfully' });
@@ -212,6 +189,7 @@ app.post('/track/:trackName/insert', async (req, res) => {
     res.status(400).json({ error: 'Error inserting track details' });
   }
 });
+
 
 
 
